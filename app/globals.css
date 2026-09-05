@@ -27,6 +27,23 @@
   font-family: var(--font-bengali);
 }
 
+/* Anchors land below the fixed/floating navbar */
+[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ── Speaker cards: centered on mobile/tablet, offset start position only on desktop (lg+) ──
+   GSAP drives the pinned slide-in on lg; below lg the card just sits centered in its slot. */
+.team-member-card-init {
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 1024px) {
+  .team-member-card-init {
+    transform: translate(var(--card-init-x, 300%), -50%) scale(0.75) rotate(20deg);
+  }
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0%);

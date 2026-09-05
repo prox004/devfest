@@ -174,7 +174,7 @@ export default function DevFestHeader() {
             initial={{ opacity: 0, scale: 0.96, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-3 sm:mt-5 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 md:gap-x-7 text-4xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[104px] font-black tracking-tight leading-none select-none"
+            className="mt-3 sm:mt-5 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 md:gap-x-7 text-3xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[104px] font-black tracking-tight leading-none select-none"
           >
             <span className="text-[#ea4335] drop-shadow-xs">DevFest</span>
             <span className="font-bengali text-zinc-950 font-bold drop-shadow-xs">

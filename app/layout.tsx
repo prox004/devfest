@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${openSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${openSans.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         {/* Google Sans / Product Sans font stylesheet */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

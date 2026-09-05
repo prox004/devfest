@@ -107,23 +107,42 @@ export default function LandingReveal() {
 
       // Animate stacked images flying into the videoSlot target
       const flyCardsIntoWidget = () => {
-        if (!videoSlotRef.current || !containerRef.current) return;
+        if (!containerRef.current) return;
 
-        // Get live bounding rectangle of destination slot inside the glass widget
+        const slot = videoSlotRef.current;
+        // The glass widget is hidden on phones — dock into the corner instead
+        const slotVisible = !!slot && slot.offsetParent !== null;
+        const slotRect = slot?.getBoundingClientRect();
+        const hasTarget = slotVisible && !!slotRect && slotRect.width > 0;
+
         const containerRect = containerRef.current.getBoundingClientRect();
-        const slotRect = videoSlotRef.current.getBoundingClientRect();
 
         const startX = 32; // top-8 left-8
         const startY = 32;
         const startWidth = 280;
 
-        const targetX = slotRect.left - containerRect.left;
-        const targetY = slotRect.top - containerRect.top;
-        const scaleFactor = slotRect.width / startWidth;
+        let targetX = 0;
+        let targetY = 0;
+        let scaleFactor = 1;
 
         const flyTl = gsap.timeline();
 
-        // 1. Stack of cards flies directly into the target slot position
+        if (hasTarget) {
+          // Desktop/tablet: fly into the live slot inside the glass widget
+          targetX = slotRect!.left - containerRect.left;
+          targetY = slotRect!.top - containerRect.top;
+          scaleFactor = slotRect!.width / startWidth;
+        } else {
+          // Mobile: fly into a virtual dock in the bottom-right corner
+          const dockWidth = Math.min(288, containerRect.width * 0.78);
+          const dockHeight = dockWidth * (10 / 16);
+          const gap = 24;
+          targetX = containerRect.width - gap - dockWidth;
+          targetY = containerRect.height - gap - dockHeight;
+          scaleFactor = dockWidth / startWidth;
+        }
+
+        // 1. Stack of cards flies directly into the target position
         validCards.forEach((card, index) => {
           flyTl.to(
             card,
@@ -138,8 +157,8 @@ export default function LandingReveal() {
           );
         });
 
-        // 2. Only AFTER images arrive and settle in place: Apple Glass shell smoothly blooms around them
-        if (glassShellRef.current) {
+        if (hasTarget && glassShellRef.current) {
+          // 2. Desktop/tablet: Apple Glass shell smoothly blooms around the photos
           flyTl.to(
             glassShellRef.current,
             {
@@ -153,6 +172,22 @@ export default function LandingReveal() {
               },
             },
             "-=0.2"
+          );
+        } else {
+          // 3. Mobile: photos settle in the corner, then disappear to free the hero
+          flyTl.to(
+            validCards,
+            {
+              opacity: 0,
+              scale: scaleFactor * 0.9,
+              duration: 0.5,
+              ease: "power2.out",
+              delay: 0.35,
+              stagger: 0.03,
+              onComplete: () => {
+                setRevealDone(true);
+              },
+            }
           );
         }
 
@@ -234,8 +269,8 @@ export default function LandingReveal() {
         <div ref={counter3Ref} className="relative top-[-15px]" />
       </div>
 
-      {/* Apple-Glass Widget Shell: Invisible at start, appears ONLY after images settle in place */}
-      <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-10 z-30 pointer-events-auto">
+      {/* Apple-Glass Widget Shell: hidden on phones to save hero space */}
+      <div className="hidden md:block absolute bottom-6 right-6 sm:bottom-8 sm:right-10 z-30 pointer-events-auto">
         <div
           ref={glassShellRef}
           className="group relative w-72 sm:w-80 md:w-88 rounded-3xl p-2.5 backdrop-blur-3xl bg-gradient-to-b from-white/55 via-white/35 to-white/45 border border-white/70 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.18),0_8px_20px_-6px_rgba(0,0,0,0.08),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.05] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.22)] will-change-transform"

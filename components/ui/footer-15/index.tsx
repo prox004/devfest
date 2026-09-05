@@ -181,7 +181,7 @@ export function Footer15() {
             </div>
 
             {/* 3. Mailing List / Newsletter Form (4 cols) */}
-            <div className="lg:col-span-4 flex flex-col gap-4 bg-zinc-900/90 rounded-2xl p-6 border border-zinc-800 shadow-inner">
+            <div id="register" className="lg:col-span-4 flex flex-col gap-4 bg-zinc-900/90 rounded-2xl p-6 border border-zinc-800 shadow-inner scroll-mt-28">
               <div className="flex items-center gap-2">
                 <div className="size-8 rounded-lg bg-[#EA4335]/15 text-[#EA4335] flex items-center justify-center">
                   <FaEnvelope className="size-4" />

@@ -55,7 +55,7 @@ export default function TeamSection() {
           </h1>
           <p className="max-w-2xl text-neutral-600 dark:text-neutral-400">
             Meet the incredible minds behind DevFest Kolkata - the dream team
-            dedicated to making this year's event unforgettable.
+            dedicated to making this year&apos;s event unforgettable.
           </p>
         </div>
 

@@ -259,10 +259,11 @@ export default function LandingReveal() {
 
     const onPointerDown = (e: PointerEvent) => {
       if ((e.target as HTMLElement).closest("button")) return;
+      // Prevent native HTML5 image drag (ghost) from hijacking the gesture
+      e.preventDefault();
       if (!widget.hasPointerCapture(e.pointerId)) widget.setPointerCapture(e.pointerId);
 
-      isDragging = true;
-      const containerRect = container.getBoundingClientRect();
+      isDragging = true;      const containerRect = container.getBoundingClientRect();
       const widgetRect = widget.getBoundingClientRect();
       origLeft = widgetRect.left - containerRect.left;
       origTop = widgetRect.top - containerRect.top;
@@ -285,8 +286,7 @@ export default function LandingReveal() {
       );
     };
 
-    const stopDrag = (e: PointerEvent) => {
-      if (!isDragging) return;
+    const stopDrag = (e: PointerEvent) => {      if (!isDragging) return;
       isDragging = false;
       if (widget.hasPointerCapture(e.pointerId)) widget.releasePointerCapture(e.pointerId);
       widget.style.cursor = "grab";
@@ -321,11 +321,16 @@ export default function LandingReveal() {
     widget.addEventListener("pointerup", stopDrag);
     widget.addEventListener("pointercancel", stopDrag);
 
+    // Kill native drag ghost so pointer-drag always wins, even from the image
+    const killNativeDrag = (e: Event) => e.preventDefault();
+    widget.addEventListener("dragstart", killNativeDrag);
+
     return () => {
       widget.removeEventListener("pointerdown", onPointerDown);
       widget.removeEventListener("pointermove", onPointerMove);
       widget.removeEventListener("pointerup", stopDrag);
       widget.removeEventListener("pointercancel", stopDrag);
+      widget.removeEventListener("dragstart", killNativeDrag);
     };
   }, []);
 
@@ -353,6 +358,7 @@ export default function LandingReveal() {
       {/* Apple-Glass Widget Shell: hidden on phones to save hero space, draggable on tablet/desktop */}
       <div
         ref={widgetRef}
+        data-draggable-widget="true"
         className="hidden md:block absolute bottom-6 right-6 sm:bottom-8 sm:right-10 z-30 pointer-events-auto cursor-grab select-none will-change-transform"
         title="Drag to move the highlights widget"
       >
@@ -376,7 +382,8 @@ export default function LandingReveal() {
                   key={idx}
                   src={img}
                   alt="DevFest Moment"
-                  className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+                  draggable={false}
+                  className={`absolute inset-0 h-full w-full object-cover select-none transition-opacity duration-1000 ${
                     idx === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-105"
                   }`}
                 />

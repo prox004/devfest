@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { Marquee } from "@/demos/ui/marquee";
 
@@ -44,6 +44,77 @@ const teamMembers = [
 ];
 
 export default function TeamSection() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const dragState = useRef({
+    isDragging: false,
+    pointerId: 0,
+    startX: 0,
+    lastX: 0,
+    dx: 0,
+    lastMoveAt: 0,
+  });
+
+  const setPaused = (paused: boolean) => {
+    const track = trackRef.current;
+    if (!track) return;
+    track.classList.toggle("marquee-paused", paused);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    const track = trackRef.current;
+    if (!track) return;
+    // Stop native image drag so the gesture reaches our horizontal sweep
+    if ((e.target as HTMLElement).closest("img")) {
+      e.preventDefault();
+    }
+    track.setPointerCapture(e.pointerId);
+    dragState.current = {
+      isDragging: true,
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      lastX: e.clientX,
+      dx: 0,
+      lastMoveAt: 0,
+    };
+    setPaused(true);
+    track.classList.add("marquee-dragging");
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    const state = dragState.current;
+    if (!state.isDragging || e.pointerId !== state.pointerId) return;
+    const dx = e.clientX - state.startX;
+    state.dx = dx;
+    state.lastMoveAt = performance.now();
+    // Move the track to follow the pointer
+    if (trackRef.current) {
+      trackRef.current.style.setProperty(
+        "--marquee-drag",
+        `${dx}px`
+      );
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    const state = dragState.current;
+    if (!state.isDragging || e.pointerId !== state.pointerId) return;
+    state.isDragging = false;
+    const track = trackRef.current;
+    if (track) {
+      if (track.hasPointerCapture(e.pointerId)) track.releasePointerCapture(e.pointerId);
+      track.classList.remove("marquee-dragging");
+      track.style.removeProperty("--marquee-drag");
+      setPaused(false);
+    }
+  };
+
+  const handlePointerCancel = (e: React.PointerEvent) => handlePointerUp(e);
+
+  const handleDragStart = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <section id="team" className="relative w-full overflow-hidden bg-white py-12 md:py-24 dark:bg-background">
 
@@ -63,6 +134,15 @@ export default function TeamSection() {
           <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-32 bg-gradient-to-r from-white to-transparent dark:from-background" />
           <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-32 bg-gradient-to-l from-white to-transparent dark:from-background" />
 
+          <div
+            ref={trackRef}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
+            onDragStart={handleDragStart}
+            className="marquee-track cursor-grab active:cursor-grabbing touch-pan-y select-none"
+          >
           <Marquee className="[--gap:1.5rem]" pauseOnHover>
             {teamMembers.map((member) => (
               <div
@@ -72,7 +152,8 @@ export default function TeamSection() {
                 <div className="relative h-92 w-full overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
                   <Image
                     alt={member.name}
-                    className="h-full w-full object-cover grayscale transition-all duration-300 hover:grayscale-0"
+                    className="h-full w-full object-cover select-none grayscale transition-all duration-300 hover:grayscale-0"
+                    draggable={false}
                     fill
                     sizes="(max-width: 768px) 100vw, 256px"
                     src={member.image}
@@ -89,6 +170,7 @@ export default function TeamSection() {
               </div>
             ))}
           </Marquee>
+          </div>
         </div>
 
       </div>

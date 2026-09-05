@@ -51,6 +51,9 @@ export default function LandingReveal() {
     if (!containerRef.current) return;
 
     const ctx = gsap.context(() => {
+      // 0. Ensure the cream cover is fully opaque the instant JS runs
+      gsap.set(containerRef.current, { backgroundColor: "#faf9f7" });
+
       // 1. Setup Counter Digits
       if (counter1Ref.current && counter2Ref.current && counter3Ref.current) {
         counter1Ref.current.innerHTML = `
@@ -197,15 +200,7 @@ export default function LandingReveal() {
 
       const mainTl = gsap.timeline();
 
-      // 1. Background curtain wipe up
-      mainTl.to(".reveal-hero-bg", {
-        scaleY: "100%",
-        duration: 2.5,
-        ease: "power2.inOut",
-        delay: 0.2,
-      });
-
-      // 2. All images pop in and stack up at top-left
+      // 1. All images pop in and stack up at top-left
       mainTl.to(
         validCards,
         {
@@ -214,11 +209,10 @@ export default function LandingReveal() {
           duration: 0.9,
           stagger: 0.08,
           ease: "power3.out",
-        },
-        "<"
+        }
       );
 
-      // 3. Counter fades away & triggers the stack flight directly into corner slot
+      // 2. Counter fades away & triggers the stack flight directly into corner slot
       mainTl.to(".reveal-counter", {
         opacity: 0,
         duration: 0.35,
@@ -229,11 +223,11 @@ export default function LandingReveal() {
         },
       });
 
-      // 4. Fade out background curtain to reveal white Hero36 underneath
+      // 3. Fade the cream cover out to reveal the hero only after everything settles
       mainTl.to(
-        ".reveal-hero-bg",
+        containerRef.current,
         {
-          opacity: 0,
+          backgroundColor: "rgba(250, 249, 247, 0)",
           duration: 0.8,
           ease: "power2.out",
           delay: 1.6,
@@ -338,15 +332,10 @@ export default function LandingReveal() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 z-40 w-full h-[100svh] pointer-events-none overflow-hidden select-none"
+      className="absolute inset-0 z-[60] w-full h-[100svh] pointer-events-none overflow-hidden select-none bg-[#faf9f7]"
     >
-      {/* Background loader curtain wipe */}
-      <div
-        className="reveal-hero-bg absolute inset-0 w-full h-full origin-bottom bg-[#faf9f7] pointer-events-auto"
-        style={{
-          transform: "scaleY(0%)",
-        }}
-      />
+      {/* Counter, stacked cards, glass widget, etc. all sit on this opaque cream
+          panel which fully hides the hero until the reveal finishes. */}
 
       {/* 0-100% Numerical Counter during initial load */}
       <div

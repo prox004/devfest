@@ -44,6 +44,12 @@
   }
 }
 
+/* Smooth snap when dropping the draggable hero widget */
+.widget-snap {
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0%);

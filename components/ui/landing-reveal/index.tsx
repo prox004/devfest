@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { FaPlay, FaPause } from "react-icons/fa6";
+import { FaPlay, FaPause, FaGripVertical } from "react-icons/fa6";
 
 const REVEAL_IMAGES = [
   "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&auto=format&fit=crop&q=80",
@@ -29,6 +29,7 @@ export default function LandingReveal() {
   const counter3Ref = useRef<HTMLDivElement>(null);
   const videoSlotRef = useRef<HTMLDivElement>(null);
   const glassShellRef = useRef<HTMLDivElement>(null);
+  const widgetRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -243,6 +244,97 @@ export default function LandingReveal() {
     return () => ctx.revert();
   }, []);
 
+  // Drag the glass widget around the hero; snaps to the nearest corner on release
+  useEffect(() => {
+    const widget = widgetRef.current;
+    const container = containerRef.current;
+    if (!widget || !container) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let origLeft = 0;
+    let origTop = 0;
+
+    const applyPosition = (left: number, top: number) => {
+      widget.style.left = `${left}px`;
+      widget.style.top = `${top}px`;
+      widget.style.right = "auto";
+      widget.style.bottom = "auto";
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if ((e.target as HTMLElement).closest("button")) return;
+      if (!widget.hasPointerCapture(e.pointerId)) widget.setPointerCapture(e.pointerId);
+
+      isDragging = true;
+      const containerRect = container.getBoundingClientRect();
+      const widgetRect = widget.getBoundingClientRect();
+      origLeft = widgetRect.left - containerRect.left;
+      origTop = widgetRect.top - containerRect.top;
+      startX = e.clientX;
+      startY = e.clientY;
+      widget.style.cursor = "grabbing";
+      widget.classList.remove("widget-snap");
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return;
+      const containerRect = container.getBoundingClientRect();
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      const maxLeft = containerRect.width - widget.offsetWidth - 12;
+      const maxTop = containerRect.height - widget.offsetHeight - 12;
+      applyPosition(
+        Math.min(Math.max(origLeft + dx, 12), Math.max(maxLeft, 12)),
+        Math.min(Math.max(origTop + dy, 12), Math.max(maxTop, 12))
+      );
+    };
+
+    const stopDrag = (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      if (widget.hasPointerCapture(e.pointerId)) widget.releasePointerCapture(e.pointerId);
+      widget.style.cursor = "grab";
+
+      // Snap to the nearest corner
+      const containerRect = container.getBoundingClientRect();
+      const widgetRect = widget.getBoundingClientRect();
+      const margin = 24;
+      const currentLeft = widgetRect.left - containerRect.left;
+      const currentTop = widgetRect.top - containerRect.top;
+      const corners = [
+        { left: margin, top: margin },
+        { left: containerRect.width - widgetRect.width - margin, top: margin },
+        { left: margin, top: containerRect.height - widgetRect.height - margin },
+        {
+          left: containerRect.width - widgetRect.width - margin,
+          top: containerRect.height - widgetRect.height - margin,
+        },
+      ];
+      corners.sort(
+        (a, b) =>
+          (a.left - currentLeft) ** 2 +
+          (a.top - currentTop) ** 2 -
+          ((b.left - currentLeft) ** 2 + (b.top - currentTop) ** 2)
+      );
+      widget.classList.add("widget-snap");
+      applyPosition(corners[0].left, corners[0].top);
+    };
+
+    widget.addEventListener("pointerdown", onPointerDown);
+    widget.addEventListener("pointermove", onPointerMove);
+    widget.addEventListener("pointerup", stopDrag);
+    widget.addEventListener("pointercancel", stopDrag);
+
+    return () => {
+      widget.removeEventListener("pointerdown", onPointerDown);
+      widget.removeEventListener("pointermove", onPointerMove);
+      widget.removeEventListener("pointerup", stopDrag);
+      widget.removeEventListener("pointercancel", stopDrag);
+    };
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -269,8 +361,12 @@ export default function LandingReveal() {
         <div ref={counter3Ref} className="relative top-[-15px]" />
       </div>
 
-      {/* Apple-Glass Widget Shell: hidden on phones to save hero space */}
-      <div className="hidden md:block absolute bottom-6 right-6 sm:bottom-8 sm:right-10 z-30 pointer-events-auto">
+      {/* Apple-Glass Widget Shell: hidden on phones to save hero space, draggable on tablet/desktop */}
+      <div
+        ref={widgetRef}
+        className="hidden md:block absolute bottom-6 right-6 sm:bottom-8 sm:right-10 z-30 pointer-events-auto cursor-grab select-none will-change-transform"
+        title="Drag to move the highlights widget"
+      >
         <div
           ref={glassShellRef}
           className="group relative w-72 sm:w-80 md:w-88 rounded-3xl p-2.5 backdrop-blur-3xl bg-gradient-to-b from-white/55 via-white/35 to-white/45 border border-white/70 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.18),0_8px_20px_-6px_rgba(0,0,0,0.08),inset_0_1.5px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.05] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.22)] will-change-transform"
@@ -315,13 +411,19 @@ export default function LandingReveal() {
 
           {/* Footer Bar of the Glass Widget */}
           <div className="flex items-center justify-between px-2 pt-2 pb-0.5">
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-zinc-900 tracking-tight">
-                DevFest Highlights
-              </span>
-              <span className="text-[10px] font-normal text-zinc-600">
-                Google Developer Groups Kolkata
-              </span>
+            <div className="flex items-center gap-2">
+              <FaGripVertical
+                className="size-3.5 shrink-0 text-zinc-500/70"
+                title="Drag to move"
+              />
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold text-zinc-900 tracking-tight">
+                  DevFest Highlights
+                </span>
+                <span className="text-[10px] font-normal text-zinc-600">
+                  Google Developer Groups Kolkata
+                </span>
+              </div>
             </div>
 
             <div className="flex items-center gap-1.5">

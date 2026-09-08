@@ -13,18 +13,77 @@
     font-family: var(--font-google-sans);
   }
 
-  html, body {
-    background-color: #ffffff !important;
-    color: #202124 !important;
-    font-family: var(--font-google-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    html, body {
+      background-color: #ffffff !important;
+      color: #202124 !important;
+      font-family: var(--font-google-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
   }
-}
+
+  /* Fully disable native image drag on interactive carousels/widgets so pointer-drag wins */
+  .marquee-track img,
+  [data-draggable-widget] img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
+  }
 
 .font-bengali {
   font-family: var(--font-bengali);
+}
+
+/* An anchored element: land below the fixed navbar */
+[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ── Speaker cards: centered on mobile/tablet, offset start position only on desktop (lg+) ──
+   GSAP drives the pinned slide-in on lg; below lg the card just sits centered in its slot. */
+.team-member-card-init {
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 1024px) {
+  .team-member-card-init {
+    transform: translate(var(--card-init-x, 300%), -50%) scale(0.75) rotate(20deg);
+  }
+}
+
+/* Smooth snap when dropping the draggable hero widget */
+.widget-snap {
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Team carousel: auto-rotate by default, frozen while the user drags */
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap, 1.5rem)));
+  }
+}
+
+.marquee-track > .group {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.marquee-track.marquee-paused .animate-marquee-scroll,
+.marquee-track.marquee-paused .animate-marquee-vertical {
+  animation-play-state: paused !important;
+}
+
+.marquee-track.marquee-paused > .group {
+  transform: translateX(var(--marquee-drag, 0px));
+}
+
+/* While actively dragging, track the pointer 1:1 with no lag */
+.marquee-track.marquee-dragging > .group {
+  transition: none;
 }
 
 @keyframes marquee {

@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FaLinkedin, FaXTwitter } from "react-icons/fa6";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -92,6 +91,7 @@ export default function SpeakerSection() {
             if (teamMemberInitial) gsap.set(teamMemberInitial, { clearProps: "all" });
           });
 
+          // Cards fall back to their CSS-centered state (translate(-50%, -50%))
           teamMemberCards.forEach((card) => {
             gsap.set(card, { clearProps: "all" });
           });
@@ -272,9 +272,9 @@ export default function SpeakerSection() {
     <section
       ref={sectionRef}
       id="speakers"
-      className="relative w-full h-[100svh] bg-white text-zinc-900 px-4 sm:px-6 lg:px-8 py-6 flex flex-col justify-center items-center overflow-hidden select-none"
+      className="relative w-full min-h-[100svh] lg:h-[100svh] bg-white text-zinc-900 px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-6 flex flex-col justify-center items-center overflow-hidden select-none"
     >
-      <div className="w-full max-w-7xl flex flex-col h-full max-h-[560px] justify-between">
+      <div className="w-full max-w-7xl flex flex-col lg:h-full lg:max-h-[560px] justify-between">
         {/* Top Header */}
         <div className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-zinc-100/80 shrink-0">
           <div className="flex flex-col gap-2">
@@ -302,12 +302,12 @@ export default function SpeakerSection() {
           </p>
         </div>
 
-        {/* 4 Speaker Row (Shorter card length max-h-[420px], wider gap gap-8 lg:gap-10, closer to screen edges) */}
-        <div className="team flex flex-col lg:flex-row gap-7 mt-6 lg:gap-9 w-full flex-1 min-h-0 items-stretch justify-center">
+        {/* 4 Speaker cards: grid (1-col) on phones, 2-col on tablets, pinned GSAP row on desktop */}
+        <div className="team grid grid-cols-1 sm:grid-cols-2 gap-7 sm:gap-8 mt-6 lg:flex lg:flex-row lg:gap-9 w-full lg:flex-1 lg:min-h-0 items-stretch justify-center">
           {SPEAKERS.map((speaker, index) => (
             <div
               key={index}
-              className="team-member flex-1 relative w-full h-full max-h-[450px] rounded-[1.5rem] border-2 border-dashed border-zinc-300/80 bg-zinc-50/50 will-change-transform"
+              className="team-member relative w-full h-[440px] sm:h-[420px] lg:h-full lg:max-h-[450px] rounded-[1.5rem] border-2 border-dashed border-zinc-300/80 bg-zinc-50/50 will-change-transform"
               style={{
                 zIndex: 4 - index,
               }}
@@ -318,7 +318,7 @@ export default function SpeakerSection() {
                 style={{ transform: "translate(-50%, -50%)" }}
               >
                 <h1
-                  className="text-[8rem] sm:text-[9.5rem] lg:text-[10.5rem] font-bold leading-none will-change-transform"
+                  className="text-[7rem] sm:text-[8rem] lg:text-[10.5rem] font-bold leading-none will-change-transform"
                   style={{
                     color: speaker.accentColor,
                     opacity: 0.22,
@@ -332,10 +332,8 @@ export default function SpeakerSection() {
 
               {/* Sliding Team Member Card */}
               <div
-                className="team-member-card absolute top-1/2 left-1/2 w-[calc(100%+4px)] h-[calc(100%+4px)] p-4 flex flex-col justify-between rounded-[1.5rem] bg-white border border-zinc-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.06)] will-change-transform"
-                style={{
-                  transform: `translate(${300 - index * 100}%, -50%) scale(0.75) rotate(20deg)`,
-                }}
+                className="team-member-card team-member-card-init absolute top-1/2 left-1/2 w-[calc(100%+4px)] h-[calc(100%+4px)] p-4 flex flex-col justify-between rounded-[1.5rem] bg-white border border-zinc-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.06)] will-change-transform"
+                style={{ "--card-init-x": `${300 - index * 100}%` } as React.CSSProperties}
               >
                 {/* Card Top: Pill & Socials */}
                 <div className="w-full flex items-center justify-between mb-3">

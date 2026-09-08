@@ -12,7 +12,12 @@ export const metadata: Metadata = {
   title: "DevFest - Google Developer Groups",
   description: "Official DevFest website powered by Google Developer Groups",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/logo-brackets.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" },
+    ],
+    shortcut: "/logo-brackets.svg",
+    apple: "/logo-brackets.svg",
   },
 };
 

@@ -15,13 +15,13 @@ const NAV_LINKS = [
 ];
 
 const MARQUEE_ITEMS = [
-  "Eastern India’s Biggest Tech Conference",
+  "Eastern India’s Biggest Tech Festival",
   "DevFest Kolkata ‘26",
   "GDG Kolkata",
-  "Eastern India’s Biggest Tech Conference",
+  "Eastern India’s Biggest Tech Festival",
   "DevFest Kolkata ‘26",
   "GDG Kolkata",
-  "Eastern India’s Biggest Tech Conference",
+  "Eastern India’s Biggest Tech Festival",
   "DevFest Kolkata ‘26",
   "GDG Kolkata",
 ];
@@ -40,38 +40,39 @@ export default function DevFestHeader() {
 
   return (
     <header
-      className="relative w-full h-[100svh] min-h-[580px] max-h-[1100px] overflow-hidden bg-white text-zinc-900 flex flex-col justify-between"
+      className="relative w-full h-[100svh] min-h-[580px] max-h-[1100px] overflow-hidden bg-[#090a0f] text-white flex flex-col justify-between"
       id="overview"
     >
       {/* ── 1. STICKY / FLOATING RESPONSIVE NAVBAR ───────────────────────── */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-          ? "bg-white/75 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.8)] border-b border-zinc-200/60 py-2.5 sm:py-3"
+          ? "bg-black/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] border-b border-white/10 py-2.5 sm:py-3"
           : "bg-transparent border-b border-transparent shadow-none py-4 sm:py-5"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand / Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            {/* GDG Brackets Logo Mark */}
-            <div className="flex items-center gap-1 font-bold text-lg select-none">
-              <span className="text-[#4285F4] text-xl font-mono">&lt;</span>
-              <span className="flex items-center gap-0.5">
-                <span className="size-2 rounded-full bg-[#EA4335]" />
-                <span className="size-2 rounded-full bg-[#FBBC05]" />
-                <span className="size-2 rounded-full bg-[#34A853]" />
-              </span>
-              <span className="text-[#4285F4] text-xl font-mono">&gt;</span>
+          {/* Brand / Logo: Logo Long from Figma */}
+          <Link href="/" className="flex items-center gap-2.5 group transition-opacity hover:opacity-90 select-none">
+            {/* GDG Brackets Mark */}
+            <div className="relative h-6 sm:h-7 w-auto aspect-[109.467/63.5613] shrink-0">
+              <Image
+                src="/logo-brackets.svg"
+                alt="GDG Logo"
+                fill
+                priority
+                className="object-contain"
+              />
             </div>
 
-            <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 leading-tight">
-                DevFest <span className="text-[#cf7011]">Kolkata</span>
-              </span>
-              <span className="text-[10px] text-zinc-500 font-medium tracking-wider uppercase">
-                GDG Kolkata ‘26
-              </span>
-            </div>
+            {/* DevFest Wordmark */}
+            <span className="text-xl sm:text-2xl font-black tracking-tight text-white leading-none">
+              DevFest
+            </span>
+
+            {/* Kolkata Pill Badge */}
+            <span className="inline-flex items-center justify-center rounded-full bg-zinc-200 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold text-zinc-900 shadow-xs leading-none">
+              Kolkata
+            </span>
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -80,7 +81,7 @@ export default function DevFestHeader() {
               <a
                 key={link.name}
                 href={link.href}
-                className="px-3.5 py-1.5 rounded-full text-sm font-medium text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100/80 transition-all duration-150"
+                className="px-3.5 py-1.5 rounded-full text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/10 transition-all duration-150"
               >
                 {link.name}
               </a>
@@ -91,7 +92,7 @@ export default function DevFestHeader() {
           <div className="flex items-center gap-3">
             <a
               href="#register"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#922521] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#7a1e1b] hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
+              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#ea4335] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#d9382b] hover:shadow-[0_0_20px_rgba(234,67,53,0.4)] hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Get Tickets</span>
               <FaArrowRight className="text-xs transition-transform group-hover:translate-x-0.5" />
@@ -101,7 +102,7 @@ export default function DevFestHeader() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"
+              className="md:hidden p-2 rounded-lg text-zinc-200 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="Toggle Navigation Menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -118,7 +119,7 @@ export default function DevFestHeader() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="md:hidden bg-white/95 backdrop-blur-lg border-b border-zinc-200 px-6 py-5 shadow-lg"
+              className="md:hidden bg-zinc-950/95 backdrop-blur-xl border-b border-white/10 px-6 py-5 shadow-2xl text-white"
             >
               <div className="flex flex-col gap-3">
                 {NAV_LINKS.map((link) => (
@@ -126,16 +127,16 @@ export default function DevFestHeader() {
                     key={link.name}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-2 rounded-lg text-base font-medium text-zinc-700 hover:bg-zinc-50 hover:text-[#cf7011] transition-colors"
+                    className="px-3 py-2 rounded-lg text-base font-medium text-zinc-300 hover:bg-white/10 hover:text-white transition-colors"
                   >
                     {link.name}
                   </a>
                 ))}
-                <div className="pt-3 border-t border-zinc-100">
+                <div className="pt-3 border-t border-white/10">
                   <a
                     href="#register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#922521] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#7a1e1b] transition-colors"
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#ea4335] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#d9382b] transition-colors"
                   >
                     <span>Get Tickets</span>
                     <FaArrowRight className="text-xs" />
@@ -147,47 +148,52 @@ export default function DevFestHeader() {
         </AnimatePresence>
       </nav>
 
-      {/* ── 2. MAIN HERO SECTION (FROM FIGMA DESKTOP - 1) ───────────────── */}
-      <div className="relative w-full h-full flex flex-col justify-between pt-16 sm:pt-20 pb-0">
-        {/* Heritage Sketch Background */}
+      {/* ── 2. MAIN HERO SECTION WITH YOUTUBE VIDEO BACKGROUND ─────────── */}
+      <div className="relative w-full h-full flex flex-col justify-between pt-20 pb-0">
+        {/* Background YouTube Video with Ambient Dark Overlay */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-          <div className="relative w-full h-full opacity-65 sm:opacity-75">
-            <Image
-              src="/kolkata-sketch-bg.png"
-              alt="Kolkata Heritage Sketch"
-              fill
-              priority
-              className="object-cover object-center"
-              sizes="100vw"
+          {/* 16:9 Video iframe scaled to fill viewport cover */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180vw] sm:w-[140vw] md:w-[115vw] h-[180vh] sm:h-[140vh] md:h-[115vh] min-w-[100vw] min-h-[56.25vw] pointer-events-none">
+            <iframe
+              className="w-full h-full object-cover scale-110 opacity-60 contrast-110 brightness-90"
+              src="https://www.youtube-nocookie.com/embed/tcrpjKyCQ2g?autoplay=1&mute=1&loop=1&playlist=tcrpjKyCQ2g&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1"
+              title="DevFest Hero Background Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
             />
           </div>
-          {/* Subtle gradient vignette to blend into page & soften text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/40 to-white/90" />
+
+          {/* Dark gradient scrims & vignettes for contrast and readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#090a0f]/85 via-black/55 to-[#090a0f]/95" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(9,10,15,0.7)_100%)]" />
         </div>
 
-        {/* Hero Content Center */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center text-center my-auto py-2 sm:py-6">
-          {/* Badge: GDG Kolkata Presents */}
-
-          {/* Main Title: DevFest কলকাতা */}
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.96, y: 15 }}
+        {/* Hero Content Center (True Middle Centering: absolute centered in viewport, accounted for fixed nav and bottom tram) */}
+        <div className="relative z-10 flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center text-center my-auto">
+          {/* Group 62 Vector Emblem from Figma (DevFest { Kolkata '26 }) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 18 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-3 sm:mt-5 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6 md:gap-x-7 text-4xl sm:text-6xl md:text-7xl lg:text-[88px] xl:text-[104px] font-black tracking-tight leading-none select-none"
+            className="flex items-center justify-center select-none"
           >
-            <span className="text-[#ea4335] drop-shadow-xs">DevFest</span>
-            <span className="font-bengali text-zinc-950 font-bold drop-shadow-xs">
-              কলকাতা
-            </span>
-          </motion.h1>
+            <div className="relative w-[320px] sm:w-[480px] md:w-[560px] lg:w-[620px] max-w-[92vw] aspect-[475/133.427] drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)] filter">
+              <Image
+                src="/group62.svg"
+                alt="DevFest { Kolkata '26 }"
+                fill
+                priority
+                className="object-contain"
+              />
+            </div>
+          </motion.div>
 
           {/* Subtitle: Kolkata's biggest tech festival */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" }}
-            className="mt-2 sm:mt-3 text-base sm:text-xl md:text-2xl font-medium text-[#922521] tracking-tight"
+            className="mt-4 sm:mt-5 text-base sm:text-xl md:text-2xl font-medium text-zinc-300 tracking-tight"
           >
             GDG Kolkata presents Kolkata&apos;s biggest tech festival.
           </motion.p>
@@ -197,12 +203,12 @@ export default function DevFestHeader() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
-            className="mt-4 sm:mt-5 flex flex-wrap items-center justify-center gap-3 sm:gap-4 pointer-events-auto z-20"
+            className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4 pointer-events-auto z-20"
           >
             {/* Primary CTA: Register Now */}
             <a
               href="#register"
-              className="group inline-flex items-center gap-2.5 rounded-full bg-zinc-700 px-6 sm:px-7 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white transition-all duration-200 hover:bg-[#7a1e1b] hover:shadow-[0_6px_22px_rgba(146,37,33,0.45)] hover:scale-[1.03] active:scale-[0.98]"
+              className="group inline-flex items-center gap-2.5 rounded-full bg-[#ea4335] px-6 sm:px-7 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white transition-all duration-200 hover:bg-[#d9382b] hover:shadow-[0_0_30px_rgba(234,67,53,0.5)] hover:scale-[1.03] active:scale-[0.98]"
             >
               <span>Register Now</span>
               <FaArrowRight className="text-xs transition-transform duration-200 group-hover:translate-x-1" />
@@ -211,7 +217,7 @@ export default function DevFestHeader() {
             {/* Secondary CTA: Explore Speakers */}
             <a
               href="#speakers"
-              className="inline-flex items-center gap-2 rounded-full border border-zinc-300/90 bg-white/80 backdrop-blur-md px-6 sm:px-7 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-zinc-800 shadow-xs transition-all duration-200 hover:bg-white hover:border-zinc-400 hover:shadow-md hover:scale-[1.03] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-6 sm:px-7 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white shadow-xs transition-all duration-200 hover:bg-white/20 hover:border-white/40 hover:scale-[1.03] active:scale-[0.98]"
             >
               <span>Explore Speakers</span>
             </a>
@@ -219,22 +225,20 @@ export default function DevFestHeader() {
         </div>
 
         {/* ── 3. HERITAGE TRAM, OVERHEAD WIRE & MARQUEE BOX (IN HERO ONLY) ── */}
-        <div className="relative z-10 w-full overflow-x-clip shrink-0">
-          {/* The Overhead Electric Tram Wire */}
-          <div className="w-full border-t border-zinc-400/80 relative" />
-
-          {/* Tram Bay: Positioned directly between the overhead wire and marquee box */}
-          <div className="relative w-full h-[95px] sm:h-[120px] md:h-[145px] lg:h-[160px]">
+        <div className="relative z-10 w-full overflow-x-clip shrink-0 mt-auto">
+          {/* Tram Bay: Positioned directly above the marquee box */}
+          <div className="relative w-full h-[70px] sm:h-[80px] md:h-[100px] lg:h-[120px]">
             {/* Kolkata Heritage Tram: travels left-to-right, exits, waits off-screen, then re-enters naturally */}
             <div className="animate-tram absolute bottom-0 left-0 h-full w-auto pointer-events-auto z-10 cursor-pointer">
               {/* Subtle vintage suspension sway / rhythmic vibration on tracks */}
               <div className="animate-tram-sway h-full flex items-end">
                 <Image
-                  src="/kolkata-tram.png"
+                  src="/kolkata-tram.svg"
                   alt="Heritage Kolkata Tram"
                   width={417}
                   height={161}
-                  className="h-full w-auto object-contain object-bottom drop-shadow-sm select-none"
+                  unoptimized
+                  className="h-full w-auto object-contain object-bottom drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)] select-none"
                   priority
                 />
               </div>
@@ -242,11 +246,11 @@ export default function DevFestHeader() {
           </div>
 
           {/* ── 4. TICKER / MARQUEE BANNER STRIP (WHEELS ALIGNED ON TOP EDGE) ── */}
-          <div className="relative w-full bg-[#2e2e2e] text-[#e9e9e9] py-2.5 sm:py-3.5 overflow-hidden border-t-2 border-zinc-600/90 shadow-inner select-none">
+          <div className="relative w-full bg-[#121319]/90 backdrop-blur-md text-[#e9e9e9] py-2.5 sm:py-3.5 overflow-hidden border-t-2 border-white/10 shadow-2xl select-none">
             <div className="animate-marquee flex items-center whitespace-nowrap">
               {MARQUEE_ITEMS.concat(MARQUEE_ITEMS).map((item, index) => (
                 <div key={index} className="flex items-center gap-4 sm:gap-6 px-3 sm:px-5">
-                  <span className="text-xs sm:text-sm md:text-base font-semibold tracking-wide text-zinc-200">
+                  <span className="text-xs sm:text-sm md:text-base font-semibold tracking-wide text-zinc-300">
                     {item}
                   </span>
                   {/* Diamond Rotated Bullet from Figma */}

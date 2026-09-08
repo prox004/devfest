@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   FaXTwitter,
   FaLinkedin,
@@ -97,33 +98,36 @@ export function Footer15() {
   const brandChars = "DevFest Kolkata ‘26".split("");
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 pb-4 pt-12">
-      <footer className="w-full overflow-hidden rounded-3xl sm:rounded-4xl bg-[#1e1e1e] text-zinc-100 font-sans shadow-2xl border border-zinc-800">
+    <div className="w-full px-2 pt-12">
+      <footer className="w-full overflow-hidden rounded-t-4xl bg-[#1e1e1e] text-zinc-100 font-sans shadow-2xl border border-zinc-800">
         {/* Main Content Area */}
-        <div className="max-w-7xl mx-auto px-6 pt-12 pb-8 sm:px-10 sm:pt-16 lg:px-12">
+        <div className="max-w-7xl mx-auto px-2 pt-12 pb-8 sm:px-10 sm:pt-16 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
             {/* 1. Brand & Socials Column (4 cols) */}
             <div className="lg:col-span-4 flex flex-col gap-5">
-              {/* Logo */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 font-bold text-lg select-none">
-                  <span className="text-[#4285F4] text-xl font-mono">&lt;</span>
-                  <span className="flex items-center gap-0.5">
-                    <span className="size-2 rounded-full bg-[#EA4335]" />
-                    <span className="size-2 rounded-full bg-[#FBBC05]" />
-                    <span className="size-2 rounded-full bg-[#34A853]" />
-                  </span>
-                  <span className="text-[#4285F4] text-xl font-mono">&gt;</span>
+              {/* Actual DevFest Long Logo */}
+              <Link href="/" className="flex items-center gap-2.5 group transition-opacity hover:opacity-90 select-none">
+                {/* GDG Brackets Mark */}
+                <div className="relative h-6 sm:h-7 w-auto aspect-[109.467/63.5613] shrink-0">
+                  <Image
+                    src="/logo-brackets.svg"
+                    alt="GDG Logo"
+                    fill
+                    priority
+                    className="object-contain"
+                  />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-bold tracking-tight text-white leading-tight">
-                    DevFest <span className="text-[#EA4335]">Kolkata</span>
-                  </span>
-                  <span className="text-[10px] text-zinc-400 font-medium tracking-wider uppercase">
-                    GDG Kolkata ‘26
-                  </span>
-                </div>
-              </div>
+
+                {/* DevFest Wordmark */}
+                <span className="text-xl sm:text-2xl font-black tracking-tight text-white leading-none">
+                  DevFest
+                </span>
+
+                {/* Kolkata Pill Badge */}
+                <span className="inline-flex items-center justify-center rounded-full bg-zinc-200 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold text-zinc-900 shadow-xs leading-none">
+                  Kolkata
+                </span>
+              </Link>
 
               <p className="text-sm leading-relaxed text-zinc-400 font-normal">
                 Eastern India’s flagship annual developer conference powered by
@@ -233,36 +237,29 @@ export function Footer15() {
             </div>
           </div>
 
-          {/* Bottom Huge Display Brand Strip */}
-          <div className="mt-14 pt-8 border-t border-zinc-800/80 flex flex-col items-center justify-center select-none overflow-hidden">
+          {/* Bottom Huge Display Brand Strip: Increased size & bottom 25% cut */}
+          <div className="mt-14 pt-8 border-t border-zinc-800/80 w-full flex flex-col items-center justify-center select-none overflow-hidden">
             <div
-              className="flex flex-nowrap items-end justify-center whitespace-nowrap text-zinc-500/40 hover:text-zinc-400/80 transition-colors duration-300 tracking-tight font-black text-[7.5vw] md:text-[6.5vw] lg:text-[5.5vw] leading-none select-none max-w-full"
-              aria-label="DevFest Kolkata ‘26"
+              className="w-full flex items-center justify-center overflow-hidden h-[9vw] sm:h-[9.5vw] md:h-[9.8vw] lg:h-[10vw]"
+              style={{
+                lineHeight: 1,
+              }}
             >
-              {brandChars.map((char, index) => (
-                <span
-                  key={`${char}-${index}`}
-                  className="inline-block transition-transform duration-200 hover:-translate-y-2 hover:text-zinc-200"
-                  style={{
-                    width: char === " " ? "0.3em" : undefined,
-                  }}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </span>
-              ))}
-            </div>
-
-            {/* Bottom Credits & Copyright */}
-            <div className="w-full mt-6 pt-4 border-t border-zinc-800/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-400">
-              <p>
-                © 2026 Google Developer Group Kolkata. All rights reserved.
-              </p>
-              <div className="flex items-center gap-4">
-                <Link href="/#overview" className="hover:text-zinc-200 transition-colors">
-                  Back to Top ↑
-                </Link>
-                <span>•</span>
-                <span className="text-zinc-400">Made with ❤️ for Developers</span>
+              <div
+                className="flex flex-nowrap items-start justify-center whitespace-nowrap text-zinc-500/40 hover:text-zinc-400/80 transition-colors duration-300 tracking-tighter font-black text-[10.5vw] sm:text-[10vw] md:text-[9.5vw] lg:text-[9vw] leading-none select-none max-w-full -translate-y-[5%]"
+                aria-label="DevFest Kolkata ‘26"
+              >
+                {brandChars.map((char, index) => (
+                  <span
+                    key={`${char}-${index}`}
+                    className="inline-block transition-transform duration-200 hover:-translate-y-2 hover:text-zinc-200"
+                    style={{
+                      width: char === " " ? "0.25em" : undefined,
+                    }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                ))}
               </div>
             </div>
           </div>

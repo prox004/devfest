@@ -147,7 +147,7 @@ export default function ScrollTextSection() {
           {paragraphs.map((para, pIndex) => (
             <p
               key={pIndex}
-              className="text-lg sm:text-2xl md:text-3xl lg:text-[2.5rem] font-medium leading-[1.1] text-zinc-900 mb-5 last:mb-0 text-center text-pretty"
+              className="text-lg sm:text-2xl md:text-3xl lg:text-[2.25rem] font-medium leading-[1.1] text-zinc-900 mb-5 last:mb-0 text-center text-pretty"
               style={{
                 fontFamily:
                   'var(--font-google-sans-display, "Google Sans Display", "Google Sans", "Product Sans", sans-serif)',

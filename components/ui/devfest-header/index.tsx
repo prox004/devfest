@@ -205,12 +205,12 @@ export default function DevFestHeader() {
             transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
             className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4 pointer-events-auto z-20"
           >
-            {/* Primary CTA: Register Now */}
+            {/* Primary CTA: Explore Tickets */}
             <a
-              href="#register"
+              href="#tickets"
               className="group inline-flex items-center gap-2.5 rounded-full bg-[#ea4335] px-6 sm:px-7 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white transition-all duration-200 hover:bg-[#d9382b] hover:shadow-[0_0_30px_rgba(234,67,53,0.5)] hover:scale-[1.03] active:scale-[0.98]"
             >
-              <span>Register Now</span>
+              <span>Explore Tickets</span>
               <FaArrowRight className="text-xs transition-transform duration-200 group-hover:translate-x-1" />
             </a>
 

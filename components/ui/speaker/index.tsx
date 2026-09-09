@@ -175,7 +175,7 @@ export default function SpeakerSection() {
         cardSlideInAnimation = ScrollTrigger.create({
           trigger: section,
           start: "top top",
-          end: `+=${window.innerHeight * 3}`,
+          end: `+=${window.innerHeight * 2}`,
           pin: true,
           pinSpacing: true,
           scrub: 1,
@@ -272,7 +272,7 @@ export default function SpeakerSection() {
     <section
       ref={sectionRef}
       id="speakers"
-      className="relative w-full min-h-[100svh] lg:h-[100svh] bg-white text-zinc-900 px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-6 flex flex-col justify-center items-center overflow-hidden select-none"
+      className="relative w-full min-h-[100svh] lg:h-[100svh] bg-[#FCE8E6] text-zinc-900 px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-6 flex flex-col justify-center items-center overflow-hidden select-none"
     >
       <div className="w-full max-w-7xl flex flex-col lg:h-full lg:max-h-[560px] justify-between">
         {/* Top Header */}

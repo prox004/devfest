@@ -35,7 +35,7 @@ export default function ScrollTextSection() {
         pin: true,
         pinSpacing: true,
         start: "top top",
-        end: `+=${window.innerHeight * 2.5}`,
+        end: `+=${window.innerHeight * 1.5}`,
         scrub: 1,
         onUpdate: (self) => {
           const progress = self.progress;
@@ -44,8 +44,8 @@ export default function ScrollTextSection() {
             const wordText = word.querySelector<HTMLSpanElement>("span");
             if (!wordText) return;
 
-            if (progress <= 0.7) {
-              const progressTarget = 0.7;
+            if (progress <= 0.1) {
+              const progressTarget = 0.1;
               const revealProgress = Math.min(1, progress / progressTarget);
 
               const overlapWords = 14;
@@ -86,7 +86,7 @@ export default function ScrollTextSection() {
                   : 0;
               wordText.style.opacity = `${Math.pow(textRevealProgress, 0.5)}`;
             } else {
-              const reverseProgress = (progress - 0.7) / 0.3;
+              const reverseProgress = (progress - 0.1) / 0.9;
               word.style.opacity = "1";
               const targetTextOpacity = 1;
 
@@ -139,7 +139,7 @@ export default function ScrollTextSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[100svh] bg-white text-zinc-900 flex items-center justify-center px-6 sm:px-12 md:px-16 overflow-hidden select-none"
+      className="relative w-full h-[100svh] bg-[#E8F0FE] text-zinc-900 flex items-center justify-center px-6 sm:px-12 md:px-16 overflow-hidden select-none"
     >
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center">
         {/* Animated text container */}

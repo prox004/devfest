@@ -237,16 +237,16 @@ export function Footer15() {
             </div>
           </div>
 
-          {/* Bottom Huge Display Brand Strip: Increased size & bottom 25% cut */}
-          <div className="mt-14 pt-8 border-t border-zinc-800/80 w-full flex flex-col items-center justify-center select-none overflow-hidden">
+          {/* Bottom Huge Display Brand Strip */}
+          <div className="mt-14 pt-8 border-t border-zinc-800/80 w-full flex flex-col items-center justify-center select-none pb-2">
             <div
-              className="w-full flex items-center justify-center overflow-hidden h-[9vw] sm:h-[9.5vw] md:h-[9.8vw] lg:h-[10vw]"
+              className="w-full flex items-center justify-center h-[11vw] sm:h-[11vw] md:h-[11vw] lg:h-[11vw]"
               style={{
                 lineHeight: 1,
               }}
             >
               <div
-                className="flex flex-nowrap items-start justify-center whitespace-nowrap text-zinc-500/40 hover:text-zinc-400/80 transition-colors duration-300 tracking-tighter font-black text-[10.5vw] sm:text-[10vw] md:text-[9.5vw] lg:text-[9vw] leading-none select-none max-w-full -translate-y-[5%]"
+                className="flex flex-nowrap items-center justify-center whitespace-nowrap text-zinc-500/40 hover:text-zinc-400/80 transition-colors duration-300 tracking-tighter font-black text-[10.5vw] sm:text-[10vw] md:text-[9.5vw] lg:text-[9vw] leading-none select-none max-w-full"
                 aria-label="DevFest Kolkata ‘26"
               >
                 {brandChars.map((char, index) => (

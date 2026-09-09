@@ -1,10 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useEffect, useRef, useState } from "react";
 
 // Exactly 4 key highlights matching the 4 GDG colors
 const GDG_KEYWORDS: Record<string, { color: string; bg: string }> = {
@@ -14,177 +10,165 @@ const GDG_KEYWORDS: Record<string, { color: string; bg: string }> = {
   innovation: { color: "#202124", bg: "#FBBC05" }, // Google Yellow
 };
 
+const PARAGRAPHS = [
+  "DevFest Kolkata is a space for developers and designers who build with intent. It is where bold ideas turn into living technology, powered by community and creative vision.",
+  "We believe the future of technology starts with passion and shared knowledge. Google Developer Groups Kolkata connects you with the innovation that shapes tomorrow.",
+];
+
+type Token = { text: string; keyword: boolean; start: number; end: number };
+
+function tokenize(text: string): Token[] {
+  const tokens = text.split(/\s+/);
+  const words: Token[] = [];
+  let offset = 0;
+  tokens.forEach((t) => {
+    const clean = t.toLowerCase().replace(/[.,!?;:"]/g, "");
+    words.push({
+      text: t,
+      keyword: Boolean(GDG_KEYWORDS[clean]),
+      start: offset,
+      end: offset + t.length,
+    });
+    offset += t.length + 1;
+  });
+  return words;
+}
+
+const TOKENS = PARAGRAPHS.map(tokenize);
+
+function Caret() {
+  return (
+    <span
+      aria-hidden
+      className="mr-px inline-block h-[1.05em] w-[0.09em] translate-y-[0.18em] bg-[#4285F4] animate-caret-blink"
+    />
+  );
+}
+
 export default function ScrollTextSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [started, setStarted] = useState(false);
+  const [done, setDone] = useState(false);
+  const [visible, setVisible] = useState<number[]>(() => PARAGRAPHS.map(() => 0));
+  const [activePara, setActivePara] = useState(0);
 
+  // Start typing once the section scrolls well into view.
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (!containerRef.current || !textContainerRef.current) return;
-
-      const words = Array.from(
-        textContainerRef.current.querySelectorAll<HTMLDivElement>(".scroll-word")
-      );
-      const totalWords = words.length;
-
-      // Soft neutral highlight background for unhighlighted words
-      const wordHighlightBgColor = "235, 235, 235";
-
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        pin: true,
-        pinSpacing: true,
-        start: "top top",
-        end: `+=${window.innerHeight * 1.5}`,
-        scrub: 1,
-        onUpdate: (self) => {
-          const progress = self.progress;
-
-          words.forEach((word, index) => {
-            const wordText = word.querySelector<HTMLSpanElement>("span");
-            if (!wordText) return;
-
-            if (progress <= 0.1) {
-              const progressTarget = 0.1;
-              const revealProgress = Math.min(1, progress / progressTarget);
-
-              const overlapWords = 14;
-              const totalAnimationLength = 1 + overlapWords / totalWords;
-
-              const wordStart = index / totalWords;
-              const wordEnd = wordStart + overlapWords / totalWords;
-
-              const timelineScale =
-                1 /
-                Math.min(
-                  totalAnimationLength,
-                  1 + (totalWords - 1) / totalWords + overlapWords / totalWords
-                );
-
-              const adjustedStart = wordStart * timelineScale;
-              const adjustedEnd = wordEnd * timelineScale;
-              const duration = adjustedEnd - adjustedStart;
-
-              const wordProgress =
-                revealProgress <= adjustedStart
-                  ? 0
-                  : revealProgress >= adjustedEnd
-                    ? 1
-                    : (revealProgress - adjustedStart) / duration;
-
-              word.style.opacity = `${wordProgress}`;
-
-              const backgroundFadeStart =
-                wordProgress >= 0.88 ? (wordProgress - 0.88) / 0.12 : 0;
-              const backgroundOpacity = Math.max(0, 1 - backgroundFadeStart);
-              word.style.backgroundColor = `rgba(${wordHighlightBgColor}, ${backgroundOpacity})`;
-
-              const textRevealThreshold = 0.88;
-              const textRevealProgress =
-                wordProgress >= textRevealThreshold
-                  ? (wordProgress - textRevealThreshold) / (1 - textRevealThreshold)
-                  : 0;
-              wordText.style.opacity = `${Math.pow(textRevealProgress, 0.5)}`;
-            } else {
-              const reverseProgress = (progress - 0.1) / 0.9;
-              word.style.opacity = "1";
-              const targetTextOpacity = 1;
-
-              const reverseOverlapWords = 5;
-              const reverseWordStart = index / totalWords;
-              const reverseWordEnd =
-                reverseWordStart + reverseOverlapWords / totalWords;
-
-              const reverseTimelineScale =
-                1 /
-                Math.max(
-                  1,
-                  (totalWords - 1) / totalWords + reverseOverlapWords / totalWords
-                );
-
-              const reverseAdjustedStart = reverseWordStart * reverseTimelineScale;
-              const reverseAdjustedEnd = reverseWordEnd * reverseTimelineScale;
-              const reverseDuration = reverseAdjustedEnd - reverseAdjustedStart;
-
-              const reverseWordProgress =
-                reverseProgress <= reverseAdjustedStart
-                  ? 0
-                  : reverseProgress >= reverseAdjustedEnd
-                    ? 1
-                    : (reverseProgress - reverseAdjustedStart) / reverseDuration;
-
-              if (reverseWordProgress > 0) {
-                wordText.style.opacity = `${targetTextOpacity * (1 - reverseWordProgress)}`;
-                word.style.backgroundColor = `rgba(${wordHighlightBgColor}, ${reverseWordProgress})`;
-              } else {
-                wordText.style.opacity = `${targetTextOpacity}`;
-                word.style.backgroundColor = `rgba(${wordHighlightBgColor}, 0)`;
-              }
-            }
-          });
-        },
-      });
-    }, containerRef);
-
-    return () => {
-      ctx.revert();
-    };
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStarted(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -25% 0px", threshold: 0 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
-  const paragraphs = [
-    "DevFest Kolkata is a space for developers and designers who build with intent. It is where bold ideas turn into living technology, powered by community and creative vision.",
-    "We believe the future of technology starts with passion and shared knowledge. Google Developer Groups Kolkata connects you with the innovation that shapes tomorrow.",
-  ];
+  useEffect(() => {
+    if (!started) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const raf = window.requestAnimationFrame(() => {
+        setVisible(PARAGRAPHS.map((p) => p.length));
+        setDone(true);
+      });
+      return () => window.cancelAnimationFrame(raf);
+    }
+
+    let para = 0;
+    let char = 0;
+    let timer: number;
+
+    const step = () => {
+      if (char < PARAGRAPHS[para].length) {
+        setVisible((prev) =>
+          prev.map((v, i) => (i === para ? (char += 1) : v))
+        );
+        const ch = PARAGRAPHS[para][char - 1];
+        const pause = /[.,!?;:]/.test(ch) ? 280 : 30 + Math.random() * 26;
+        timer = window.setTimeout(step, pause);
+      } else if (para < PARAGRAPHS.length - 1) {
+        para += 1;
+        char = 0;
+        setActivePara(para);
+        timer = window.setTimeout(step, 560);
+      } else {
+        timer = window.setTimeout(() => setDone(true), 1600);
+      }
+    };
+
+    timer = window.setTimeout(step, 450);
+    return () => window.clearTimeout(timer);
+  }, [started]);
 
   return (
     <section
-      ref={containerRef}
-      className="relative w-full h-[100svh] bg-[#E8F0FE] text-zinc-900 flex items-center justify-center px-6 sm:px-12 md:px-16 overflow-hidden select-none"
+      ref={sectionRef}
+      className="relative w-full min-h-[90svh] bg-[#E8F0FE] text-zinc-900 flex items-center justify-center px-6 sm:px-12 md:px-16 overflow-hidden select-none"
     >
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center">
-        {/* Animated text container */}
-        <div ref={textContainerRef} className="anime-text w-full max-w-4xl">
-          {paragraphs.map((para, pIndex) => (
-            <p
-              key={pIndex}
-              className="text-lg sm:text-2xl md:text-3xl lg:text-[2.25rem] font-medium leading-[1.1] text-zinc-900 mb-5 last:mb-0 text-center text-pretty"
-              style={{
-                fontFamily:
-                  'var(--font-google-sans-display, "Google Sans Display", "Google Sans", "Product Sans", sans-serif)',
-              }}
-            >
-              {para.split(/\s+/).map((word, wIndex) => {
-                const cleanWord = word.toLowerCase().replace(/[.,!?;:"]/g, "");
-                const highlight = GDG_KEYWORDS[cleanWord];
-
-                return (
+        {TOKENS.map((words, pi) => (
+          <p
+            key={pi}
+            className="text-lg sm:text-2xl md:text-3xl lg:text-[2.25rem] font-medium leading-[1.1] text-zinc-900 mb-5 last:mb-0 text-center text-pretty"
+            style={{
+              fontFamily:
+                'var(--font-google-sans-display, "Google Sans Display", "Google Sans", "Product Sans", sans-serif)',
+            }}
+          >
+            {words.map((token, wi) => {
+              const pill = token.keyword && visible[pi] >= token.end;
+              return (
+                <React.Fragment key={wi}>
                   <span
-                    key={wIndex}
-                    className={`scroll-word inline-block relative mx-[0.18em] my-[0.05em] px-1 py-0.5 rounded-md transition-colors will-change-[background-color,opacity] opacity-0 ${highlight ? "keyword-wrapper mx-[0.25em]" : ""
-                      }`}
-                  >
-                    <span
-                      className={`inline-block relative opacity-0 ${highlight
-                        ? "px-3 py-0.5 rounded-full font-semibold"
+                    className={`inline-block relative ${pill
+                      ? "px-3 py-0.5 rounded-full font-semibold"
+                      : token.keyword
+                        ? "rounded-md"
                         : ""
-                        }`}
-                      style={
-                        highlight
-                          ? {
-                            backgroundColor: highlight.bg,
-                            color: highlight.color,
-                          }
-                          : undefined
-                      }
-                    >
-                      {word}
-                    </span>
+                      }`}
+                    style={
+                      pill
+                        ? {
+                          backgroundColor: GDG_KEYWORDS[
+                            token.text.toLowerCase().replace(/[.,!?;:"]/g, "")
+                          ].bg,
+                          color: GDG_KEYWORDS[
+                            token.text.toLowerCase().replace(/[.,!?;:"]/g, "")
+                          ].color,
+                        }
+                        : undefined
+                    }
+                  >
+                    {Array.from(token.text).map((ch, ci) => {
+                      const abs = token.start + ci;
+                      const shown = visible[pi] > abs;
+                      const caretHere =
+                        !done && activePara === pi && visible[pi] === abs;
+                      return (
+                        <React.Fragment key={ci}>
+                          {caretHere && <Caret />}
+                          <span style={{ opacity: shown ? 1 : 0 }}>
+                            {ch}
+                          </span>
+                        </React.Fragment>
+                      );
+                    })}
+                    {!done && activePara === pi && visible[pi] === token.end && (
+                      <Caret />
+                    )}
                   </span>
-                );
-              })}
-            </p>
-          ))}
-        </div>
+                  {wi < words.length - 1 ? " " : ""}
+                </React.Fragment>
+              );
+            })}
+          </p>
+        ))}
       </div>
     </section>
   );

@@ -175,7 +175,7 @@ export default function SpeakerSection() {
         cardSlideInAnimation = ScrollTrigger.create({
           trigger: section,
           start: "top top",
-          end: `+=${window.innerHeight * 2}`,
+          end: `+=${window.innerHeight * 0.4}`,
           pin: true,
           pinSpacing: true,
           scrub: 1,

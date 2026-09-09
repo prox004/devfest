@@ -155,7 +155,7 @@ export default function TeamSection() {
   };
 
   return (
-    <section id="team" className="relative w-full overflow-hidden bg-[#E6F4EA] py-12 md:py-24 dark:bg-background">
+    <section id="team" className="relative w-full bg-[#E6F4EA] py-12 md:py-24 dark:bg-background overflow-visible">
 
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mx-auto mb-16 flex max-w-5xl flex-col items-center px-6 text-center lg:px-0">
@@ -170,9 +170,6 @@ export default function TeamSection() {
         </div>
 
         <div className="relative w-full">
-          <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-32 bg-gradient-to-r from-[#E6F4EA] to-transparent dark:from-background" />
-          <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-32 bg-gradient-to-l from-[#E6F4EA] to-transparent dark:from-background" />
-
           <div
             ref={trackRef}
             onPointerDown={handlePointerDown}
@@ -182,7 +179,7 @@ export default function TeamSection() {
             onDragStart={handleDragStart}
             className="marquee-track cursor-grab active:cursor-grabbing touch-pan-y select-none"
           >
-          <Marquee className="[--gap:1.5rem]" pauseOnHover>
+          <Marquee className="[--gap:1.5rem] overflow-visible" pauseOnHover>
             {teamMembers.map((member) => (
               <div
                 className="group flex w-64 shrink-0 flex-col"

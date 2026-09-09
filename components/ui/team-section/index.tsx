@@ -6,40 +6,79 @@ import { Marquee } from "@/demos/ui/marquee";
 
 const teamMembers = [
   {
-    image:
-      "https://cdn.21st.dev/assets/mirror/f4/f43137dada970ee6a29a0497d1f699d54b92e5381350eaa66dc827e3ffb11645.jpg",
-    name: "Patrick Stewart",
-    role: "CEO - Founder",
+    image: "/team/sumantro.webp",
+    name: "Sumantro Mukherjee",
+    role: "Organiser",
   },
   {
-    image:
-      "https://cdn.21st.dev/assets/mirror/d5/d549c11c16ad2335895c39339d1a4307b648b24a6baae68662246cf9bd37ac13.jpg",
-    name: "Alena Rosser",
-    role: "Director of Content",
+    image: "/team/atri-das.webp",
+    name: "Atri Das",
+    role: "Organiser",
   },
   {
-    image:
-      "https://cdn.21st.dev/assets/mirror/e0/e058437411e954b747056a494f26349751828f12c2137a883e5aebbd1fcf5eef.jpg",
-    name: "Fletch Skinner",
-    role: "Tech Manager",
+    image: "/team/sarmistha.webp",
+    name: "Sarmistha Ghosh",
+    role: "Event Organiser",
   },
   {
-    image:
-      "https://cdn.21st.dev/assets/mirror/45/45ba21cbafae178989cd3652799f42123a80e0ac44065ac00cbb265ea948bc41.jpg",
-    name: "Marc Spector",
-    role: "Director of Content",
+    image: "/team/akash.webp",
+    name: "Akash Kumar Majumder",
+    role: "Event Organiser",
   },
   {
-    image:
-      "https://cdn.21st.dev/assets/mirror/90/904d97602d25b1b5ef0f4058abad6d8185d8cebd0750771404a934a44dd537fb.jpg",
-    name: "Natalia Skinner",
-    role: "Cnippet Researcher",
+    image: "/team/ankan.webp",
+    name: "Ankan Saha",
+    role: "Web Dev",
   },
   {
-    image:
-      "https://cdn.21st.dev/assets/mirror/3b/3b6a929c98b85177bcc2eb4606a71b7487011128756dbf0adda24e803ca70ed7.jpg",
-    name: "David Kim",
-    role: "Engineering Lead",
+    image: "/team/rahul-pal.webp",
+    name: "Rahul Pal",
+    role: "Web Dev",
+  },
+  {
+    image: "/team/subhadip-das.webp",
+    name: "Subhadip Das",
+    role: "Web Dev",
+  },
+  {
+    image: "/team/udity.webp",
+    name: "Udity Banerjee",
+    role: "Graphics",
+  },
+  {
+    image: "/team/tarun.webp",
+    name: "Tarun Binay Das",
+    role: "Graphics",
+  },
+  {
+    image: "/team/protyoy.webp",
+    name: "Protyoy Bhandary",
+    role: "Graphics",
+  },
+  {
+    image: "/team/titash.webp",
+    name: "Titash Shil",
+    role: "PR and Outreach",
+  },
+  {
+    image: "/team/shromana.webp",
+    name: "Shromana Majumder",
+    role: "Emcee",
+  },
+  {
+    image: "/team/simran.webp",
+    name: "Simran Sharma",
+    role: "Emcee",
+  },
+  {
+    image: "/team/soumyadeep.webp",
+    name: "Soumyadeep Halder",
+    role: "Photography / Videography",
+  },
+  {
+    image: "/team/sweety.webp",
+    name: "Sweety Jha",
+    role: "Social Media",
   },
 ];
 

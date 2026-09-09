@@ -17,6 +17,7 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@hirael": "https://hirael.com/r/{name}.json"
+    "@hirael": "https://hirael.com/r/{name}.json",
+    "@1st-pouf": "https://1st-pouf.worksonmy.dev/r/{name}.json"
   }
 }

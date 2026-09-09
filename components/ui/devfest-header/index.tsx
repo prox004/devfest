@@ -91,7 +91,7 @@ export default function DevFestHeader() {
           {/* Action Button & Mobile Toggle */}
           <div className="flex items-center gap-3">
             <a
-              href="#register"
+              href="#tickets"
               className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#ea4335] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#d9382b] hover:shadow-[0_0_20px_rgba(234,67,53,0.4)] hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Get Tickets</span>
@@ -134,7 +134,7 @@ export default function DevFestHeader() {
                 ))}
                 <div className="pt-3 border-t border-white/10">
                   <a
-                    href="#register"
+                    href="#tickets"
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex w-full items-center justify-center gap-2 rounded-full bg-[#ea4335] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#d9382b] transition-colors"
                   >

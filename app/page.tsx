@@ -3,6 +3,7 @@ import DevFestHeader from "@/components/ui/devfest-header";
 import ScrollTextSection from "@/components/ui/scroll-text";
 import SpeakerSection from "@/components/ui/speaker";
 import TestimonialSection from "@/components/ui/testimonial";
+import TicketsSection from "@/components/ui/tickets";
 import TeamSection from "@/components/ui/team-section";
 import FAQDemo from "@/components/ui/faq3/demo";
 import { Footer15 } from "@/components/ui/footer-15";
@@ -24,16 +25,19 @@ export default function Home() {
         {/* 4. 4-Column Animated Speaker Showcase (Pinned GSAP slide-in effect) */}
         <SpeakerSection />
 
-        {/* 5. Testimonial Section */}
+        {/* 5. Ticket Pricing Section */}
+        <TicketsSection />
+
+        {/* 6. Testimonial Section */}
         <TestimonialSection />
 
-        {/* 6. Team Showcase Section */}
+        {/* 7. Team Showcase Section */}
         <TeamSection />
 
-        {/* 7. FAQ Section */}
+        {/* 8. FAQ Section */}
         <FAQDemo />
 
-        {/* 8. Official DevFest Interactive Footer */}
+        {/* 9. Official DevFest Interactive Footer */}
         <Footer15 />
       </div>
     </SmoothScrollProvider>
